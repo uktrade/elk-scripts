@@ -3,9 +3,9 @@
 import os
 from urllib.parse import urlparse
 
-CF_USERNAME=os.env['CF_USERNAME']
-CF_PASSWORD=os.env['CF_PASSWORD']
-CF_ENDPOINT=os.env['CF_ENDPOINT']
+CF_USERNAME=os.environ['CF_USERNAME']
+CF_PASSWORD=os.environ['CF_PASSWORD']
+CF_ENDPOINT=os.environ['CF_ENDPOINT']
 
 
 from cloudfoundry import get_client
@@ -51,10 +51,10 @@ if __name__ == '__main__':
                     try:
                         for sb in app.service_bindings():
                             if sb['entity'].get('syslog_drain_url', None):
-                                log_drain_url = redact_password_in_url(sb["entity"]["syslog_drain_url"])
+                                log_drain_url = redact_password_in_url(sb['entity']['syslog_drain_url'])
                                 print(f'{org_name} / {space_name} / {app_name} FOUND {log_drain_url}')
                                 break
+                        else:
+                            print(f'{org_name} / {space_name} / {app_name} NO LOG DRAIN')
                     except Exception as ex:
                         print(f'{org_name} / {space_name} / {app_name} ERROR RETRIEVING SERVICES')
-                    else:
-                        print(f'{org_name} / {space_name} / {app_name} NO LOG DRAIN')
